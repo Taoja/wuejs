@@ -1,0 +1,32 @@
+language : node_js
+node_js:
+ - "10"
+install:
+- npm install
+os:
+ - linux
+
+script: 
+ - npm run es
+ - ls
+ - npm run umd
+ - ls
+jobs:
+  include:
+    - stage: npm release
+      if: tag =~ /v+([1-9]\d|[1-9])(\.([1-9]\d|\d)){2}$/
+      deploy:
+        - provider: releases
+          api_key: "$github_TOKEN"
+          file: 
+            - dist/wue.min.js
+            - dist/wue.es.js
+          skip_cleanup: true
+          on:
+            tags: true
+        - provider: npm
+          email: "$EMAIL"
+          api_key: "$TOKEN"
+          skip_cleanup: true
+          on:
+            tags: true

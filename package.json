@@ -1,11 +1,38 @@
 {
   "name": "wuejs",
   "version": "1.0.2",
-  "description": "",
-  "main": "src/index.js",
+  "description": "改写小程序写法",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "es": "node ./build/rollup.js es",
+    "umd": "node ./build/rollup.js umd"
   },
-  "author": "",
-  "license": "ISC"
+  "main": "dist/wue.min.js",
+  "module": "dist/wue.es.js",
+  "keywords": [
+    "vue",
+    "vuejs",
+    "miniprogram",
+    "miniprogram vue",
+    "wechat app",
+    "wechatapp",
+    "wechat vue"
+  ],
+  "author": {
+    "name": "黄武韬",
+    "email": "346792184@qq.com"
+  },
+  "bugs": {
+    "url": "https://github.com/Taoja/wuejs/issues",
+    "email": "346792184@qq.com"
+  },
+  "homepage": "https://taoja.github.io/wuejs",
+  "license": "MIT",
+  "devDependencies": {
+    "rollup": "^1.1.2",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-license": "^0.8.1",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-uglify": "^6.0.2",
+    "rollup-plugin-uglify-es": "^0.0.1"
+  }
 }
