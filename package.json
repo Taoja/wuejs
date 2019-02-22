@@ -1,6 +1,6 @@
 {
   "name": "wuejs",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "改写小程序写法",
   "scripts": {
     "es": "node ./build/rollup.js es",
