@@ -7,6 +7,13 @@ const computed = function () {
       enumerable: true,
       get: () => {
         let val = cpt[e].call(this)
+        if (this.watch && this.watch.hasOwnProperty(e)) {
+          if (typeof this.watch[e] == 'object') {
+            this.watch[e].handler.call(this, val, this.data[e])
+          } else {
+            this.watch[e].call(this, val, this.data[e])
+          }
+        }
         return val
       }
     }

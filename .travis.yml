@@ -9,8 +9,6 @@ os:
 script: 
  - npm run es
  - ls
- - npm run umd
- - ls
 jobs:
   include:
     - stage: npm release
@@ -19,7 +17,6 @@ jobs:
         - provider: releases
           api_key: "$github_TOKEN"
           file: 
-            - dist/wue.min.js
             - dist/wue.es.js
           skip_cleanup: true
           on:

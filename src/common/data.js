@@ -44,7 +44,7 @@ const data = function () {
         if (typeof value == 'object') {
           addSetter.call(this, value, i)
         }
-        if (this.watch.hasOwnProperty(i)) {
+        if (this.watch && this.watch.hasOwnProperty(i)) {
           if (typeof this.watch[i] == 'object') {
             this.watch[i].handler.call(this, value, this.data[i])
           } else {

@@ -6,8 +6,7 @@
     "es": "node ./build/rollup.js es",
     "umd": "node ./build/rollup.js umd"
   },
-  "main": "dist/wue.min.js",
-  "module": "dist/wue.es.js",
+  "main": "src/index.js",
   "keywords": [
     "vue",
     "vuejs",
