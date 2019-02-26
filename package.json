@@ -6,7 +6,7 @@
     "es": "node ./build/rollup.js es",
     "umd": "node ./build/rollup.js umd"
   },
-  "main": "src/index.js",
+  "main": "dist/wue.es.js",
   "keywords": [
     "vue",
     "vuejs",
@@ -30,8 +30,7 @@
     "rollup": "^1.1.2",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-license": "^0.8.1",
-    "rollup-plugin-node-resolve": "^4.0.0",
-    "rollup-plugin-uglify": "^6.0.2",
-    "rollup-plugin-uglify-es": "^0.0.1"
+    "rollup-plugin-minify-es": "^1.1.1",
+    "rollup-plugin-node-resolve": "^4.0.0"
   }
 }

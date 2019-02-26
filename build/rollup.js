@@ -1,17 +1,21 @@
 const rollup = require('rollup')
 const commonjs = require('rollup-plugin-commonjs')
 const resolve = require('rollup-plugin-node-resolve')
-const uglify = require('rollup-plugin-uglify-es')
+const uglify = require('rollup-plugin-minify-es')
 const license = require('rollup-plugin-license')
 const args = process.argv
 
 const format = args.includes('es') ? 'es' : 'umd'
-
 rollup.rollup({
   input: 'src/index.js',
   plugins: [
     commonjs(),
     resolve(),
+    uglify({
+      output: {
+        comments: 'some'
+      }
+    }),
     license({
       banner: `
         Wue v<%= pkg.version %>
@@ -20,11 +24,6 @@ rollup.rollup({
         document -> https://taoja.github.io/wue
         github -> https://github.com/Taoja/wue
       `
-    }),
-    uglify({
-      output: {
-        comments: 'some'
-      }
     })
   ]
 }).then(function (bundle) {
