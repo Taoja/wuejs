@@ -36,30 +36,37 @@ Page = options => {
 }
 
 Component = options => {
-  const properties = ['mounted','created','destroyed','computed','watch','methods','data', 'created', 'ready', 'attached', 'moved', 'detached', 'error', 'properties', 'behaviors']
+  const params = ['mounted','created','destroyed','computed','watch','methods','data', 'created', 'ready', 'attached', 'moved', 'detached', 'error', 'properties', 'behaviors']
   const mixins = [
     ...options.mixins || [],
     Wue.mixin
   ]
+  options.data = options.data || {}
   options.methods = options.methods || {}
   options.methods.__wue__ = Wue.__wue__
   options.data.__c = options.computed || {}
   options.data.__w = options.watch || {}
   if (Array.isArray(mixins)) {
-    merge(mixins, options, properties)
+    merge(mixins, options, params)
   }
 
   var props = options.props || {}
-  
+  var properties = {}
   for (let key in props) {
-    props[key] = {
+    properties[key] = {
       type: props[key].type,
-      value: props[key].default
+      value: props[key].default,
+      observer(e, f, g) {
+        if (typeof props[key].observer == 'function') {
+          props[key].observer.call(this, e, f, g)
+        }
+        this[key] = e
+      }
     }
   }
   options.properties = {
     ...options.properties,
-    ...props
+    ...properties
   }
   delete options.computed
   delete options.watch
@@ -127,15 +134,15 @@ const Wue = {
       this.data = Object.assign(this.data, obj)
       if (setDataSwitch && !__empty(dataCache)) {
         setDataSwitch = false
-        var st = requestAnimationFrame(() => {
+        wx.nextTick(() => {
           setDataSwitch = true
           const cpts = Object.keys(this.computed || {})
           cpts.forEach((e) => {
             dataCache[e] = this[e]
           })
+          console.log(`setData{${Object.keys(dataCache)}}`)
           this.setData.call(this, dataCache)
           dataCache = {}
-          cancelAnimationFrame(st)
         })
       }
     }
