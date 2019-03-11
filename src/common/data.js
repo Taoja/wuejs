@@ -12,7 +12,7 @@ const addSetter = function (obj, name) {
         if (typeof value == 'object') {
           addSetter.call(this, value, name)
         }
-        if (this.watch.hasOwnProperty(name) && this.watch[name].deep) {
+        if (this.watch && this.watch.hasOwnProperty(name) && this.watch[name].deep) {
           if (typeof this.watch[name] == 'object') {
             this.watch[name].handler.call(this, value, this.data[name])
           } else {

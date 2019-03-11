@@ -3,9 +3,7 @@ import data from './common/data'
 import { __empty } from './lib/help'
 import watch from './common/watch'
 
-const nativePage = Page
-const nativeComponent = Component
-Page = options => {
+const page = options => {
   const properties = ['mounted','created','activated','destroyed','computed','watch','methods','data', 'onLoad', 'onReady', 'onShow', 'onHide', 'onUnload', 'onPullDownRefresh', 'onReachBottom', 'onShareAppMessage', 'onPageScroll', 'onTabItemTap']
   const mixins = [
     ...options.mixins || [],
@@ -32,10 +30,10 @@ Page = options => {
   options.onShow = options.activated
   options.onUnload = options.destroyed
   options.onLoad = options.created
-  nativePage(options)
+  Page(options)
 }
 
-Component = options => {
+const component = options => {
   const params = ['mounted','created','destroyed','computed','watch','methods','data', 'created', 'ready', 'attached', 'moved', 'detached', 'error', 'properties', 'behaviors']
   const mixins = [
     ...options.mixins || [],
@@ -81,7 +79,7 @@ Component = options => {
    */
   options.ready = options.mounted
   options.detached = options.destroyed
-  nativeComponent(options)
+  Component(options)
 }
 
 function merge(mixins, options, properties) {
@@ -146,9 +144,13 @@ const Wue = {
         })
       }
     }
-
-    computed.call(this)
     data.call(this)
+    computed.call(this)
     watch.call(this)
   }
+}
+
+export {
+  page,
+  component
 }
