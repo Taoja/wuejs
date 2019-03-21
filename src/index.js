@@ -72,12 +72,17 @@ const component = options => {
   delete options.props
   /** 
    * 重写生命周期名
-   * created => onLoad
-   * mounted => onReady
-   * activated => onShow
-   * destroyed => onUnload
+   * created => created
+   * mounted => ready
+   * activated => pageLifetimes.show
+   * deactivated => pageLifetimes.hide
+   * destroyed => detached
    */
   options.ready = options.mounted
+  options.pageLifetimes = {
+    show: options.activated,
+    hide: options.deactivated
+  }
   options.detached = options.destroyed
   Component(options)
 }
