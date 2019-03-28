@@ -143,7 +143,7 @@ const Wue = {
           cpts.forEach((e) => {
             dataCache[e] = this[e]
           })
-          console.log(`setData{${Object.keys(dataCache)}}`)
+          // console.log(`setData{${Object.keys(dataCache)}}`)
           this.setData.call(this, dataCache)
           dataCache = {}
         })
