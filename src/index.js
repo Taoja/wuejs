@@ -33,7 +33,7 @@ const page = options => {
   Page(options)
 }
 
-const component = options => {
+var component = options => {
   const params = ['mounted','created','destroyed','computed','watch','methods','data', 'created', 'ready', 'attached', 'moved', 'detached', 'error', 'properties', 'behaviors']
   const mixins = [
     ...options.mixins || [],
@@ -155,7 +155,129 @@ const Wue = {
   }
 }
 
+class define {
+  constructor() {
+    this.options = {}
+  }
+  proxyData(context) {
+    let that = this
+    let actionComputed = {}
+    for(let cp in that.computed) {
+      actionComputed[cp] = that.computed[cp].call(this)
+    }
+    context.setData(actionComputed)
+    for(let key in context.data) {
+      Object.defineProperty(context, key, {
+        get() {
+          return this.data[key]
+        },
+        set(e) {
+          if (key in that.computed) {
+            throw new Error('computed have no set!')
+          } else {
+            this.data[key] = e
+            let computed = {}
+            for(let cp in that.computed) {
+              computed[cp] = that.computed[cp].call(this)
+            }
+            this.setData({
+              [key]: e,
+              ...computed
+            })
+            return e
+          }
+        }
+      })
+    }
+  }
+  componentWatch(e) {
+    this.watch = {
+      ...e.watch
+    }
+  }
+  componentComputed(e) {
+    this.computed = {
+      ...e.computed
+    }
+  }
+  componentMethods(e) {
+    let methods = {}
+    for(let key in e.methods) {
+      methods[key] = e.methods[key]
+    }
+    this.options.methods = methods
+  }
+  componentLifeTimes(e) {
+    let that = this
+    this.options.created = function(z) {
+      that.proxyData(this)
+      e.created && e.created.call(this, z)
+    }
+    this.options.ready = e.mounted,
+    this.options.detached = e.destroyed,
+    this.options.pageLifetimes = {
+      show: e.activated,
+      hide: e.deactivated
+    }
+  }
+  componentProps(e) {
+    let properties = {}
+    let that = this
+    for(let key in e.data) {
+      properties[key] = {
+        type: Boolean | Array | Function | String | Object | Number,
+        value: e.data[key],
+        observer(e, f, g){
+          console.log(this)
+          if (!__empty(that.watch[key])) {
+            if (typeof that.watch[key] == 'function') {
+              that.watch[key].call(this, e, f, g)
+            } else {
+              that.watch[key].handler.call(this, e, f, g)
+            }
+          }
+        }
+      }
+    }
+    for(let key in e.props) {
+      properties[key] = {
+        type: e.props[key].type,
+        value: e.props[key].default,
+        observer(e, f, g){
+          console.log(this)
+          if (!__empty(that.watch[key])) {
+            if (typeof that.watch[key] == 'function') {
+              that.watch[key].call(this, e, f, g)
+            } else {
+              that.watch[key].handler.call(this, e, f, g)
+            }
+          }
+        }
+      }
+    }
+    for(let key in e.computed) {
+      properties[key] = {
+        type: Boolean | Array | Function | String | Object | Number,
+        value: ''
+      }
+    }
+    this.options.properties = properties
+  }
+  static Component(e) {
+    let that = new define()
+    that.componentLifeTimes(e)
+    that.componentWatch(e)
+    that.componentComputed(e)
+    that.componentProps(e)
+    that.componentMethods(e)
+    Component(that.options)
+  }
+}
+
+component = define.Component
+
 export {
   page,
-  component
+  component,
+  define
 }

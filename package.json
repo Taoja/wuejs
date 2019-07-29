@@ -6,7 +6,7 @@
     "es": "node ./build/rollup.js es",
     "umd": "node ./build/rollup.js umd"
   },
-  "main": "dist/wue.es.js",
+  "main": "src/index.js",
   "keywords": [
     "vue",
     "vuejs",
@@ -32,5 +32,8 @@
     "rollup-plugin-license": "^0.8.1",
     "rollup-plugin-minify-es": "^1.1.1",
     "rollup-plugin-node-resolve": "^4.0.0"
+  },
+  "dependencies": {
+    "obaa": "^1.0.1"
   }
 }
